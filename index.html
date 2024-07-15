@@ -53,13 +53,13 @@
     <h1>Budget Planner</h1>
     <form id="budgetForm">
         <label for="budget">Budget</label>
-        <input type="text" id="budget" name="budget" required>
+        <input type="text" id="budget" name="budget" required aria-label="Enter your budget">
 
         <label for="plans">Plans</label>
-        <textarea id="plans" name="plans" rows="4" required></textarea>
+        <textarea id="plans" name="plans" rows="4" required aria-label="Describe your plans"></textarea>
 
         <label for="timeFrame">Time Frame</label>
-        <select id="timeFrame" name="timeFrame" required>
+        <select id="timeFrame" name="timeFrame" required aria-label="Select time frame">
             <option value="true">Weekly</option>
             <option value="false">Monthly</option>
         </select>
@@ -77,9 +77,6 @@
         const plans = document.getElementById('plans').value;
         const timeFrame = document.getElementById('timeFrame').value;
 
-        const ngrokUrl = 'https://abcd1234.ngrok.io'; // Replace with your ngrok URL
-        const apiUrl = `${ngrokUrl}/api/budget`;
-
         const requestBody = {
             budget: budget,
             plans: plans,
@@ -87,7 +84,7 @@
         };
 
         try {
-            const response = await fetch(apiUrl, {
+            const response = await fetch('https://matlab28.github.io/BudgetFriendly/api/budget', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -114,6 +111,7 @@
 </script>
 </body>
 </html>
+
 
 
 <!--<!DOCTYPE html>-->
