@@ -19,6 +19,7 @@ public class BudgetController {
     private static final Logger logger = LoggerFactory.getLogger(BudgetController.class);
 
     @PostMapping
+    @CrossOrigin(origins = "https://matlab28.github.io")
     public ResponseEntity<BudgetResponseDto> processBudget(@RequestBody BudgetRequestDto requestDto) {
         try {
             budgetService.processUserRequest(requestDto);
