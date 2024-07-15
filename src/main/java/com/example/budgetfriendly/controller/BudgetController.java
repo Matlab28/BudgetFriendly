@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/budget")
+@CrossOrigin(origins = "https://matlab28.github.io")
 @RequiredArgsConstructor
 public class BudgetController {
 
