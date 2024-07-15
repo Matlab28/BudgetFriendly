@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            position: relative;
         }
         .container {
             max-width: 600px;
@@ -15,6 +16,9 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+            background-color: #fff;
         }
         h1 {
             text-align: center;
@@ -46,9 +50,38 @@
             border: 1px solid #007bff;
             border-radius: 5px;
         }
+        /* Loading styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(5px); /* Blur effect */
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 999; /* Above everything else */
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3); /* Lighter border */
+            border-top: 4px solid #007bff; /* Blue border on top */
+            border-radius: 50%; /* Circle shape */
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite; /* Spin animation */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
 <div class="container">
     <h1>Budget Planner</h1>
     <form id="budgetForm">
@@ -84,6 +117,10 @@
         };
 
         try {
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex';
+
             const response = await fetch('http://localhost:8080/api/budget', {
                 method: 'POST',
                 headers: {
@@ -100,6 +137,10 @@
             }
         } catch (error) {
             displayResponse('Error: ' + error.message);
+        } finally {
+            // Hide loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'none';
         }
     });
 
@@ -111,3 +152,118 @@
 </script>
 </body>
 </html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Budget Planner</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--        }-->
+<!--        .container {-->
+<!--            max-width: 600px;-->
+<!--            margin: 0 auto;-->
+<!--            padding: 20px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            border-radius: 5px;-->
+<!--            box-shadow: 0 0 10px rgba(0,0,0,0.1);-->
+<!--        }-->
+<!--        h1 {-->
+<!--            text-align: center;-->
+<!--        }-->
+<!--        label {-->
+<!--            display: block;-->
+<!--            margin: 10px 0 5px;-->
+<!--        }-->
+<!--        input[type="text"], textarea, select {-->
+<!--            width: 100%;-->
+<!--            padding: 8px;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+<!--        button {-->
+<!--            padding: 10px 15px;-->
+<!--            background-color: #007bff;-->
+<!--            color: #fff;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            cursor: pointer;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+<!--        button:hover {-->
+<!--            background-color: #0056b3;-->
+<!--        }-->
+<!--        .response {-->
+<!--            margin-top: 20px;-->
+<!--            padding: 10px;-->
+<!--            border: 1px solid #007bff;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h1>Budget Planner</h1>-->
+<!--    <form id="budgetForm">-->
+<!--        <label for="budget">Budget</label>-->
+<!--        <input type="text" id="budget" name="budget" required>-->
+
+<!--        <label for="plans">Plans</label>-->
+<!--        <textarea id="plans" name="plans" rows="4" required></textarea>-->
+
+<!--        <label for="timeFrame">Time Frame</label>-->
+<!--        <select id="timeFrame" name="timeFrame" required>-->
+<!--            <option value="true">Weekly</option>-->
+<!--            <option value="false">Monthly</option>-->
+<!--        </select>-->
+
+<!--        <button type="submit">Submit</button>-->
+<!--    </form>-->
+<!--    <div id="responseContainer" class="response" style="display: none;"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    document.getElementById('budgetForm').addEventListener('submit', async function(event) {-->
+<!--        event.preventDefault();-->
+
+<!--        const budget = document.getElementById('budget').value;-->
+<!--        const plans = document.getElementById('plans').value;-->
+<!--        const timeFrame = document.getElementById('timeFrame').value;-->
+
+<!--        const requestBody = {-->
+<!--            budget: budget,-->
+<!--            plans: plans,-->
+<!--            weeklyOrMonthly: timeFrame === 'true'-->
+<!--        };-->
+
+<!--        try {-->
+<!--            const response = await fetch('http://localhost:8080/api/budget', {-->
+<!--                method: 'POST',-->
+<!--                headers: {-->
+<!--                    'Content-Type': 'application/json'-->
+<!--                },-->
+<!--                body: JSON.stringify(requestBody)-->
+<!--            });-->
+
+<!--            if (response.ok) {-->
+<!--                const data = await response.json();-->
+<!--                displayResponse(data.geminiResponse);-->
+<!--            } else {-->
+<!--                displayResponse('Error: Unable to process the request');-->
+<!--            }-->
+<!--        } catch (error) {-->
+<!--            displayResponse('Error: ' + error.message);-->
+<!--        }-->
+<!--    });-->
+
+<!--    function displayResponse(responseText) {-->
+<!--        const responseContainer = document.getElementById('responseContainer');-->
+<!--        responseContainer.style.display = 'block';-->
+<!--        responseContainer.innerText = responseText || 'No response from server';-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
